@@ -5,28 +5,53 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirección a App</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #2196F3; /* Azul */
+            color: #FFFFFF; /* Blanco */
+            font-family: Arial, sans-serif;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #1976D2; /* Azul oscuro */
+            color: #FFFFFF; /* Blanco */
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0D47A1; /* Azul más oscuro al pasar el ratón */
+        }
+    </style>
     <script>
         function abrirYRedirigir() {
             // Intenta abrir la app bunker si está instalada
-            window.location.href = 'bunker://open';
-            
-            // Si bunker://open no funciona, redirige a las tiendas de aplicaciones
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            var isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+
+             // Espera 1 segundo antes de redirigir a la tienda de aplicaciones solo si es necesario
             setTimeout(function() {
-                var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-                
-                // Detecta si es un dispositivo iOS
-                if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                    window.location.href = 'https://apps.apple.com/us/app/bunker-invest-in-the-us/id6446183408';
-                } else { // Si no es iOS, asume que es Android
-                    window.location.href = 'https://play.google.com/store/apps/details?id=com.bunkerapp&pcampaignid=web_share';
+                if (!isIOS) { // Solo si no es iOS, intenta abrir bunker://open
+                    window.location.href = 'bunker://open';
                 }
-            }, 1000); // Espera 1 segundo antes de redirigir a la tienda de aplicaciones
+            }, 1000);
+
+            if (isIOS) {
+                window.location.href = 'https://apps.apple.com/us/app/bunker-invest-in-the-us/id6446183408';
+            } else {
+                window.location.href = 'https://play.google.com/store/apps/details?id=com.bunkerapp&pcampaignid=web_share';
+            }
+
         }
     </script>
 </head>
 <body>
-    <h1>Ejemplo de Redirección a la Aplicación</h1>
-    <p>Haz clic en el botón para abrir la aplicación "bunker".</p>
     <button onclick="abrirYRedirigir()">Abrir "bunker"</button>
 </body>
 </html>
